@@ -6,6 +6,21 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const sumOfAllFeedbacks = () => {
+    return good + neutral + bad;
+  };
+
+  const getAverageFeedback = () => {
+    return (good * 1 + neutral * 0 + bad * -1) / sumOfAllFeedbacks();
+  };
+
+  const getPercentageOfPositiveFeedback = () => {
+    const sumOfAll = sumOfAllFeedbacks();
+    if (sumOfAll === 0) {
+      return 0;
+    }
+    return (good * 100) / sumOfAll;
+  };
 
   return (
     <div>
@@ -20,6 +35,9 @@ const App = () => {
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {bad}</p>
+        <p>all {sumOfAllFeedbacks()}</p>
+        <p>average {getAverageFeedback()}</p>
+        <p>positive {getPercentageOfPositiveFeedback()}%</p>
       </div>
     </div>
   );
