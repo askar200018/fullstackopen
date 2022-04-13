@@ -26,7 +26,10 @@ const App = () => {
       <div>
         find countries
         <input value={query} onChange={handleQueryChange} />
-        {countries.length > 0 && <FilterResult countries={filteredCountries} />}
+        {filteredCountries.length}
+        {filteredCountries.length > 0 && (
+          <FilterResult countries={filteredCountries} />
+        )}
       </div>
     </div>
   );
