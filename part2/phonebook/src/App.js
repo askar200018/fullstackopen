@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import personsService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -50,9 +51,11 @@ const App = () => {
       number: newNumber,
     };
 
-    setPersons([...persons, personObject]);
-    setNewName('');
-    setNewNumber('');
+    personsService.create(personObject).then((response) => {
+      setPersons([...persons, response.data]);
+      setNewName('');
+      setNewNumber('');
+    });
   };
 
   return (
