@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
-  const [successMessage, setSuccessMessage] = useState('faksdj');
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personsService.getAll().then((response) => {
@@ -85,16 +86,28 @@ const App = () => {
     });
   };
 
-  const deletePerson = (id) => {
-    personsService.remove(id).then(() => {
-      setPersons(persons.filter((person) => person.id !== id));
-    });
+  const deletePerson = (removedPerson) => {
+    personsService
+      .remove(removedPerson.id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== removedPerson.id));
+      })
+      .catch(() => {
+        setPersons(persons.filter((person) => person.id !== removedPerson.id));
+        setErrorMessage(
+          `Information of ${removedPerson.name} has already been removed from server`
+        );
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      });
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
       <Notification message={successMessage} variant="success" />
+      <Notification message={errorMessage} variant="error" />
       <Filter filter={filter} handleFilter={handleFilter} />
 
       <h3>Add a new</h3>
