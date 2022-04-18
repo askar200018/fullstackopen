@@ -32,23 +32,40 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const updateUser = (id, newPerson) => {
+    personsService.update(id, newPerson).then((response) => {
+      setPersons(
+        persons.map((person) => (person.id !== id ? person : response.data))
+      );
+      setNewName('');
+      setNewNumber('');
+    });
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
     if (newName.trim() === '' || newNumber.trim() === '') {
       return;
     }
+    const personObject = {
+      name: newName.trim(),
+      number: newNumber.trim(),
+    };
 
-    const isPersonExist = persons.find((person) => person.name === newName);
+    const isPersonExist = persons.find(
+      (person) => person.name === newName.trim()
+    );
 
     if (isPersonExist) {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace old number with a new one?`
+        )
+      ) {
+        updateUser(isPersonExist.id, personObject);
+      }
       return;
     }
-
-    const personObject = {
-      name: newName,
-      number: newNumber,
-    };
 
     personsService.create(personObject).then((response) => {
       setPersons([...persons, response.data]);
