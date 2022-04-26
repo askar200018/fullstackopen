@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const password = "YOUR_PASSWORD";
+const password = process.env.DATABASE_PASSWORD;
 
 const url = `mongodb+srv://fullstackopen:${password}@cluster0.kubte.mongodb.net/noteApp?retryWrites=true&w=majority`;
 
