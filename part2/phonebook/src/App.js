@@ -43,14 +43,22 @@ const App = () => {
   };
 
   const updateUser = (id, newPerson) => {
-    personsService.update(id, newPerson).then((response) => {
-      setPersons(
-        persons.map((person) => (person.id !== id ? person : response.data))
-      );
-      setNewName('');
-      setNewNumber('');
-      showSuccessMessage(`Updated ${response.data.name}`);
-    });
+    personsService
+      .update(id, newPerson)
+      .then((response) => {
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : response.data))
+        );
+        setNewName('');
+        setNewNumber('');
+        showSuccessMessage(`Updated ${response.data.name}`);
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      });
   };
 
   const addPerson = (event) => {
@@ -78,12 +86,20 @@ const App = () => {
       return;
     }
 
-    personsService.create(personObject).then((response) => {
-      setPersons([...persons, response.data]);
-      setNewName('');
-      setNewNumber('');
-      showSuccessMessage(`Added ${response.data.name}`);
-    });
+    personsService
+      .create(personObject)
+      .then((response) => {
+        setPersons([...persons, response.data]);
+        setNewName('');
+        setNewNumber('');
+        showSuccessMessage(`Added ${response.data.name}`);
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      });
   };
 
   const deletePerson = (removedPerson) => {
